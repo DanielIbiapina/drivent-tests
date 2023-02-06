@@ -58,7 +58,6 @@ describe('GET /hotels', () => {
     it('should respond with status 404 when user doesnt have a hotel yet', async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
-      await prisma.hotel.deleteMany({});
 
       const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
 
@@ -112,8 +111,9 @@ describe('GET /hotels', () => {
       const hotel = await createHotel();
 
       const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
-
+      console.log(response.body);
       expect(response.status).toEqual(httpStatus.OK);
+
       expect(response.body).toEqual(
         expect.arrayContaining([
           expect.objectContaining<Omit<Hotel, 'createdAt' | 'updatedAt'>>({
